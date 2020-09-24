@@ -20,7 +20,7 @@ export const Login = (props) => {
   const [form, setForm] = useState('login');
 
   const handleChange = (id) => (e) => {
-    const updatedUser = {};
+    const updatedUser = { ...user };
 
     updatedUser[id] = e;
     setUser(updatedUser);
