@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import jwtDecode from 'jwt-decode';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,9 +9,11 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import * as SecureStore from 'expo-secure-store';
 import * as actions from '../actions';
 import BorderButton from '../components/BorderButton';
 import { API_URL } from '@env';
+import { getCookies } from '../utils/cookies';
 
 export const Login = (props) => {
   const [user, setUser] = useState({
@@ -20,6 +23,24 @@ export const Login = (props) => {
     passwordConfirm: '',
   });
   const [form, setForm] = useState('login');
+
+  useEffect(() => {
+    async function fetchToken() {
+      const auth = await SecureStore.getItemAsync('auth');
+      const storedUser = jwtDecode(auth);
+      if (auth !== null) {
+        props.setUser('token', auth);
+        props.setUser('id', storedUser.id);
+        props.setUser('email', storedUser.email);
+        props.setUser('username', storedUser.username);
+        props.setUser('loggedIn', true);
+        props.setUser('admin', storedUser.admin);
+        props.setUser('init', true);
+      }
+    }
+
+    fetchToken();
+  }, []);
 
   const handleChange = (id) => (e) => {
     const updatedUser = { ...user };
@@ -83,18 +104,31 @@ export const Login = (props) => {
       fetch(`${url}?${urlSeachParams}`, {
         method: 'POST',
       })
+        .then((res) => {
+          const auth = getCookies(res).auth;
+          if (auth) {
+            const resUser = jwtDecode(auth);
+
+            props.setUser('token', auth);
+            props.setUser('id', resUser.id);
+            props.setUser('email', resUser.email);
+            props.setUser('username', resUser.username);
+            props.setUser('loggedIn', true);
+            props.setUser('admin', resUser.admin);
+            props.setUser('init', true);
+
+            SecureStore.setItemAsync('auth', auth);
+
+            props.navigation.push('PostList');
+          }
+          return res;
+        })
         .then((res) => res.json())
         .then((res) => {
           if (form === 'forgotPassword') {
             //toast.success('An email has been sent.');
           } else {
-            props.setUser('id', res.id);
-            props.setUser('email', res.email);
-            props.setUser('username', res.username);
-            props.setUser('loggedIn', true);
-            props.setUser('admin', res.admin);
-            props.setUser('init', true);
-            props.navigation.push('PostList');
+            //
           }
         })
         .catch((error) => {
@@ -176,9 +210,7 @@ export const Login = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(actions, dispatch);
-};
+const mapDispatchToProps = (dispatch) => bindActionCreators(actions, dispatch);
 
 export default connect(null, mapDispatchToProps)(Login);
 
