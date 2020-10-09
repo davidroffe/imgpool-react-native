@@ -14,6 +14,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import PostList from './src/screens/PostList';
 import PostDetail from './src/screens/PostDetail';
+import Login from './src/screens/Login';
 import reducers from './src/reducers';
 
 const Root = createStackNavigator();
@@ -24,6 +25,7 @@ const App: () => React$Node = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Root.Navigator>
+          <Root.Screen name="Login" component={Login} />
           <Root.Screen name="PostList" component={PostList} />
           <Root.Screen name="PostDetail" component={PostDetail} />
         </Root.Navigator>

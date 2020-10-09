@@ -8,7 +8,7 @@ const initialState = {
   loggedIn: false,
   admin: false,
   init: false,
-  favorites: []
+  favorites: [],
 };
 
 const user = (state = initialState, action) => {
