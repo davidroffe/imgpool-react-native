@@ -185,8 +185,8 @@ export default connect(null, mapDispatchToProps)(Login);
 const styles = StyleSheet.create({
   container: {
     height: '100%',
-    paddingTop: '40%',
     backgroundColor: '#666',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   innerContainer: {
