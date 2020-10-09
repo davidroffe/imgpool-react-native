@@ -24,22 +24,14 @@ const App: () => React$Node = () => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Root.Navigator>
-          <Root.Screen
-            name="Login"
-            component={Login}
-            options={{ headerLeft: null }}
-          />
-          <Root.Screen
-            name="PostList"
-            component={PostList}
-            options={{ headerLeft: null }}
-          />
-          <Root.Screen
-            name="PostDetail"
-            component={PostDetail}
-            options={{ headerLeft: null }}
-          />
+        <Root.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Root.Screen name="Login" component={Login} />
+          <Root.Screen name="PostList" component={PostList} />
+          <Root.Screen name="PostDetail" component={PostDetail} />
         </Root.Navigator>
       </NavigationContainer>
     </Provider>
