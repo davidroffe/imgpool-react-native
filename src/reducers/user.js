@@ -8,6 +8,7 @@ const initialState = {
   loggedIn: false,
   admin: false,
   init: false,
+  token: '',
   favorites: [],
 };
 
@@ -29,6 +30,8 @@ const user = (state = initialState, action) => {
       return { ...state, loggedIn: action.value };
     case 'SET_ADMIN':
       return { ...state, admin: action.value };
+    case 'SET_TOKEN':
+      return { ...state, token: action.value };
     case 'CLEAR_USER':
       return { ...initialState, init: true };
     case 'SET_INIT':
