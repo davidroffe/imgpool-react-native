@@ -22,10 +22,10 @@ const MainMenu = (props) => {
       </TouchableHighlight>
       <TouchableHighlight
         onPress={() => {
-          props.navigation.navigate('Login');
+          props.navigation.navigate('Account');
         }}
       >
-        <AccountIcon active={activeState === 'Login'} />
+        <AccountIcon active={activeState === 'Account'} />
       </TouchableHighlight>
     </View>
   );

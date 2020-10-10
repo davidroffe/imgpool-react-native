@@ -14,7 +14,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PostList from './src/screens/PostList';
 import PostDetail from './src/screens/PostDetail';
-import Account from './src/screens/Login';
+import Account from './src/screens/Account';
+import Login from './src/screens/Login';
 import MainMenu from './src/components/MainMenu';
 import reducers from './src/reducers';
 
@@ -33,7 +34,8 @@ const App: () => React$Node = () => {
         >
           <Tab.Screen name="PostList" component={PostList} />
           <Tab.Screen name="PostDetail" component={PostDetail} />
-          <Tab.Screen name="Login" component={Account} />
+          <Tab.Screen name="Account" component={Account} />
+          <Tab.Screen name="Login" component={Login} />
         </Tab.Navigator>
       </NavigationContainer>
     </Provider>
