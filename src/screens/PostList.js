@@ -19,7 +19,7 @@ export const PostList = (props) => {
         <TouchableOpacity
           style={styles.thumbnailWrapper}
           onPress={() => {
-            props.navigation.push('PostDetail', { post: item });
+            props.navigation.navigate('PostDetail', { post: item });
           }}
         >
           <Image
