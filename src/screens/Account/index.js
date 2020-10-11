@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as SecureStore from 'expo-secure-store';
 import jwtDecode from 'jwt-decode';
-import * as actions from '../actions';
-import BorderButton from '../components/BorderButton';
-import { EditIcon } from '../components/icons';
+import * as actions from '../../actions';
+import BorderButton from '../../components/BorderButton';
+import { EditIcon } from '../../components/icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Account = (props) => {
@@ -29,6 +29,10 @@ const Account = (props) => {
 
     fetchToken();
   }, []);
+
+  const editField = (field) => () => {
+    props.navigation.navigate('EditField', { field });
+  };
 
   const logout = () => {};
 
@@ -55,60 +59,28 @@ const Account = (props) => {
       <Text style={styles.fieldHeader}>Username</Text>
       <View style={styles.row}>
         <Text style={styles.field}>{props.user.username}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            // setEditAccount({
-            //   ...editAccount,
-            //   show: true,
-            //   field: 'edit-username',
-            // })
-          }}
-        >
+        <TouchableOpacity onPress={editField('Username')}>
           <EditIcon />
         </TouchableOpacity>
       </View>
       <Text style={styles.fieldHeader}>Email</Text>
       <View style={styles.row}>
         <Text style={styles.field}>{props.user.email}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            // setEditAccount({
-            //   ...editAccount,
-            //   show: true,
-            //   field: 'edit-email',
-            // })
-          }}
-        >
+        <TouchableOpacity onPress={editField('Email')}>
           <EditIcon />
         </TouchableOpacity>
       </View>
       <Text style={styles.fieldHeader}>Password</Text>
       <View style={styles.row}>
         <Text style={styles.field}>hidden</Text>
-        <TouchableOpacity
-          onPress={() => {
-            // setEditAccount({
-            //   ...editAccount,
-            //   show: true,
-            //   field: 'edit-password',
-            // })
-          }}
-        >
+        <TouchableOpacity onPress={editField('Password')}>
           <EditIcon />
         </TouchableOpacity>
       </View>
       <Text style={styles.fieldHeader}>Bio</Text>
       <View style={styles.row}>
         <Text style={styles.field}>{props.user.bio}</Text>
-        <TouchableOpacity
-          onPress={() => {
-            // setEditAccount({
-            //   ...editAccount,
-            //   show: true,
-            //   field: 'edit-bio',
-            // })
-          }}
-        >
+        <TouchableOpacity onPress={editField('Bio')}>
           <EditIcon />
         </TouchableOpacity>
       </View>
