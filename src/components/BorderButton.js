@@ -1,19 +1,15 @@
 import React from 'react';
-import { TouchableHighlight, View, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 
 const BorderButton = ({ text, onPress, shade }) => {
   return (
-    <TouchableHighlight
-      activeOpacity={0.5}
-      underlayColor={'white'}
-      onPress={onPress}
-    >
+    <TouchableOpacity onPress={onPress}>
       <View style={shade === 'dark' ? styles.darkButton : styles.lightButton}>
         <Text style={shade === 'dark' ? styles.darkText : styles.lightText}>
           {text}
         </Text>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 };
 
