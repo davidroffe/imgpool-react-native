@@ -1,4 +1,5 @@
 import { API_URL } from '@env';
+import * as SecureStore from 'expo-secure-store';
 
 export const clearPost = () => ({
   type: 'CLEAR_POST',
@@ -56,6 +57,12 @@ export const fetchPosts = (
       dispatch(setSearch(searchQuery));
       dispatch(setPosts(newPosts));
     });
+};
+
+export const logout = (navigation) => (dispatch) => {
+  SecureStore.deleteItemAsync('auth');
+  dispatch(setUser('logout'));
+  navigation.navigate('Login');
 };
 
 export const setPostsLoading = (state) => {

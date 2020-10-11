@@ -38,6 +38,8 @@ const user = (state = initialState, action) => {
       return { ...state, init: true };
     case 'SET_FAVORITES':
       return { ...state, favorites: action.value };
+    case 'SET_LOGOUT':
+      return { ...initialState, init: true };
     default:
       return state;
   }

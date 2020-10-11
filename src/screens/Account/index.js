@@ -34,7 +34,9 @@ const Account = (props) => {
     props.navigation.navigate('EditField', { field });
   };
 
-  const logout = () => {};
+  const logout = () => {
+    props.logout(props.navigation);
+  };
 
   return (
     <View style={styles.container}>
@@ -49,13 +51,7 @@ const Account = (props) => {
           shade="dark"
         />
       </View>
-      <BorderButton
-        onPress={() => {
-          /* logout */
-        }}
-        text="Log Out"
-        shade="dark"
-      />
+      <BorderButton onPress={logout} text="Log Out" shade="dark" />
       <Text style={styles.fieldHeader}>Username</Text>
       <View style={styles.row}>
         <Text style={styles.field}>{props.user.username}</Text>
