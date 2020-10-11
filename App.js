@@ -16,6 +16,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import PostList from './src/screens/PostList';
 import PostDetail from './src/screens/PostDetail';
 import Account from './src/screens/Account';
+import EditField from './src/screens/Account/EditField';
 import Login from './src/screens/Login';
 import MainMenu from './src/components/MainMenu';
 import reducers from './src/reducers';
@@ -32,6 +33,7 @@ const AccountStackScreen = () => {
       }}
     >
       <AccountStack.Screen name="Account" component={Account} />
+      <AccountStack.Screen name="EditField" component={EditField} />
     </AccountStack.Navigator>
   );
 };
