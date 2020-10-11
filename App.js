@@ -26,7 +26,11 @@ const store = createStore(reducers, applyMiddleware(thunk));
 
 const AccountStackScreen = () => {
   return (
-    <AccountStack.Navigator>
+    <AccountStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
       <AccountStack.Screen name="Account" component={Account} />
     </AccountStack.Navigator>
   );
