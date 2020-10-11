@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
@@ -11,10 +11,8 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as SecureStore from 'expo-secure-store';
-import * as actions from '../actions';
-import BorderButton from '../components/BorderButton';
-import { API_URL } from '@env';
-import { getCookies } from '../utils/cookies';
+import * as actions from '../../actions';
+import BorderButton from '../../components/BorderButton';
 
 export const Login = (props) => {
   const [user, setUser] = useState({
@@ -25,25 +23,27 @@ export const Login = (props) => {
   });
   const [form, setForm] = useState('login');
 
-  useFocusEffect(() => {
-    async function fetchToken() {
-      const auth = await SecureStore.getItemAsync('auth');
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchToken() {
+        const auth = await SecureStore.getItemAsync('auth');
 
-      if (auth !== null) {
-        const storedUser = jwtDecode(auth);
-        props.setUser('token', auth);
-        props.setUser('id', storedUser.id);
-        props.setUser('email', storedUser.email);
-        props.setUser('username', storedUser.username);
-        props.setUser('loggedIn', true);
-        props.setUser('admin', storedUser.admin);
-        props.setUser('init', true);
-        props.navigation.navigate('Account');
+        if (auth !== null) {
+          const storedUser = jwtDecode(auth);
+          props.setUser('token', auth);
+          props.setUser('id', storedUser.id);
+          props.setUser('email', storedUser.email);
+          props.setUser('username', storedUser.username);
+          props.setUser('loggedIn', true);
+          props.setUser('admin', storedUser.admin);
+          props.setUser('init', true);
+          props.navigation.navigate('Account');
+        }
       }
-    }
 
-    fetchToken();
-  }, []);
+      fetchToken();
+    }, []),
+  );
 
   const handleChange = (id) => (e) => {
     const updatedUser = { ...user };
@@ -61,83 +61,15 @@ export const Login = (props) => {
   };
 
   const handleSubmit = () => {
-    let newErrorMessage = [];
-    let url;
-
     switch (form) {
       case 'login':
-        url = `${API_URL}/api/user/login`;
+        props.login(user, props.navigation);
         break;
       case 'signUp':
-        url = `${API_URL}/api/user/signup`;
+        props.signUp(user, props.navigation);
         break;
       case 'forgotPassword':
-        url = `${API_URL}/api/user/password-reset`;
-        break;
-    }
-
-    if (user.email === undefined || user.email === '') {
-      newErrorMessage.push('Please enter an email.');
-    }
-    if (form === 'login' || form === 'signUp') {
-      if (user.password === undefined || user.password === '') {
-        newErrorMessage.push('Please enter a password.');
-      }
-    }
-    if (form === 'signUp') {
-      if (user.password !== user.passwordConfirm) {
-        newErrorMessage.push('Passwords do not match.');
-      }
-      if (user.password.length < 8) {
-        newErrorMessage.push('Password must be at least 8 characters.');
-      }
-    }
-    if (newErrorMessage.length > 0) {
-      newErrorMessage.forEach((error) => {
-        console.log(error);
-        //toast.error(error);
-      });
-    } else {
-      const urlSeachParams = new URLSearchParams({
-        email: user.email,
-        username: user.username,
-        password: user.password,
-        passwordConfirm: user.passwordConfirm,
-      });
-      fetch(`${url}?${urlSeachParams}`, {
-        method: 'POST',
-      })
-        .then((res) => {
-          const auth = getCookies(res).auth;
-          if (auth) {
-            const resUser = jwtDecode(auth);
-
-            props.setUser('token', auth);
-            props.setUser('id', resUser.id);
-            props.setUser('email', resUser.email);
-            props.setUser('username', resUser.username);
-            props.setUser('loggedIn', true);
-            props.setUser('admin', resUser.admin);
-            props.setUser('init', true);
-
-            SecureStore.setItemAsync('auth', auth);
-
-            props.navigation.push('PostList');
-          }
-          return res;
-        })
-        .then((res) => res.json())
-        .then((res) => {
-          if (form === 'forgotPassword') {
-            //toast.success('An email has been sent.');
-          } else {
-            //
-          }
-        })
-        .catch((error) => {
-          console.log('error ' + error);
-          //toast.error(error);
-        });
+        props.resetPassword(user);
     }
   };
 

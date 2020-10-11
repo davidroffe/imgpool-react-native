@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
@@ -11,26 +11,28 @@ import { EditIcon } from '../../components/icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Account = (props) => {
-  useFocusEffect(() => {
-    async function fetchToken() {
-      const auth = await SecureStore.getItemAsync('auth');
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchToken() {
+        const auth = await SecureStore.getItemAsync('auth');
 
-      if (auth !== null) {
-        const storedUser = jwtDecode(auth);
-        props.setUser('token', auth);
-        props.setUser('id', storedUser.id);
-        props.setUser('email', storedUser.email);
-        props.setUser('username', storedUser.username);
-        props.setUser('loggedIn', true);
-        props.setUser('admin', storedUser.admin);
-        props.setUser('init', true);
-      } else {
-        props.navigation.navigate('Login');
+        if (auth !== null) {
+          const storedUser = jwtDecode(auth);
+          props.setUser('token', auth);
+          props.setUser('id', storedUser.id);
+          props.setUser('email', storedUser.email);
+          props.setUser('username', storedUser.username);
+          props.setUser('loggedIn', true);
+          props.setUser('admin', storedUser.admin);
+          props.setUser('init', true);
+        } else {
+          props.navigation.navigate('Login');
+        }
       }
-    }
 
-    fetchToken();
-  }, []);
+      fetchToken();
+    }, []),
+  );
 
   const editField = (field) => () => {
     props.navigation.navigate('EditField', { field });

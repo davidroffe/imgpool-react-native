@@ -1,4 +1,6 @@
 import { API_URL } from '@env';
+import { getCookies } from '../utils/cookies';
+import jwtDecode from 'jwt-decode';
 import * as SecureStore from 'expo-secure-store';
 
 export const clearPost = () => ({
@@ -57,6 +59,146 @@ export const fetchPosts = (
       dispatch(setSearch(searchQuery));
       dispatch(setPosts(newPosts));
     });
+};
+
+export const resetPassword = (user) => (dispatch) => {
+  let newErrorMessage = [];
+  const url = `${API_URL}/api/user/password-reset`;
+
+  if (user.email === undefined || user.email === '') {
+    newErrorMessage.push('Please enter an email.');
+  }
+
+  if (newErrorMessage.length > 0) {
+    newErrorMessage.forEach((error) => {
+      console.log(error);
+      //toast.error(error);
+    });
+  } else {
+    const urlSeachParams = new URLSearchParams({
+      email: user.email,
+    });
+    fetch(`${url}?${urlSeachParams}`, {
+      method: 'POST',
+    })
+      .then((res) => {
+        //toast.success('An email has been sent.');
+      })
+      .catch((error) => {
+        console.log('error ' + error);
+        //toast.error(error);
+      });
+  }
+};
+
+export const signUp = (user, navigation) => (dispatch) => {
+  let newErrorMessage = [];
+  const url = `${API_URL}/api/user/signup`;
+
+  if (user.email === undefined || user.email === '') {
+    newErrorMessage.push('Please enter an email.');
+  }
+  if (user.password === undefined || user.password === '') {
+    newErrorMessage.push('Please enter a password.');
+  }
+  if (user.password !== user.passwordConfirm) {
+    newErrorMessage.push('Passwords do not match.');
+  }
+  if (user.password.length < 8) {
+    newErrorMessage.push('Password must be at least 8 characters.');
+  }
+
+  if (newErrorMessage.length > 0) {
+    newErrorMessage.forEach((error) => {
+      console.log(error);
+      //toast.error(error);
+    });
+  } else {
+    const urlSeachParams = new URLSearchParams({
+      email: user.email,
+      username: user.username,
+      password: user.password,
+      passwordConfirm: user.passwordConfirm,
+    });
+    return fetch(`${url}?${urlSeachParams}`, {
+      method: 'POST',
+    })
+      .then((res) => {
+        const auth = getCookies(res).auth;
+        if (auth) {
+          const resUser = jwtDecode(auth);
+
+          setUser('token', auth);
+          setUser('id', resUser.id);
+          setUser('email', resUser.email);
+          setUser('username', resUser.username);
+          setUser('loggedIn', true);
+          setUser('admin', resUser.admin);
+          setUser('init', true);
+
+          SecureStore.setItemAsync('auth', auth);
+
+          navigation.navigate('Account');
+        }
+        return res;
+      })
+      .catch((error) => {
+        console.log('error ' + error);
+      });
+  }
+};
+
+export const login = (user, navigation) => (dispatch) => {
+  let newErrorMessage = [];
+  const url = `${API_URL}/api/user/login`;
+
+  if (user.email === undefined || user.email === '') {
+    newErrorMessage.push('Please enter an email.');
+  }
+  if (user.password === undefined || user.password === '') {
+    newErrorMessage.push('Please enter a password.');
+  }
+
+  if (newErrorMessage.length > 0) {
+    newErrorMessage.forEach((error) => {
+      console.log(error);
+      //toast.error(error);
+    });
+  } else {
+    const urlSeachParams = new URLSearchParams({
+      email: user.email,
+      username: user.username,
+      password: user.password,
+      passwordConfirm: user.passwordConfirm,
+    });
+    fetch(`${url}?${urlSeachParams}`, {
+      method: 'POST',
+    })
+      .then((res) => {
+        const auth = getCookies(res).auth;
+        if (auth) {
+          const resUser = jwtDecode(auth);
+
+          setUser('token', auth);
+          setUser('id', resUser.id);
+          setUser('email', resUser.email);
+          setUser('username', resUser.username);
+          setUser('loggedIn', true);
+          setUser('admin', resUser.admin);
+          setUser('init', true);
+
+          SecureStore.setItemAsync('auth', auth);
+
+          navigation.navigate('Account');
+        }
+        return res;
+      })
+      .then((res) => res.json())
+      .catch((error) => {
+        console.log('error ' + error);
+        //toast.error(error);
+      });
+  }
 };
 
 export const logout = (navigation) => (dispatch) => {

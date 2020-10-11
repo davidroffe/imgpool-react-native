@@ -17,7 +17,7 @@ import PostList from './src/screens/PostList';
 import PostDetail from './src/screens/PostDetail';
 import Account from './src/screens/Account';
 import EditField from './src/screens/Account/EditField';
-import Login from './src/screens/Login';
+import Login from './src/screens/Account/Login';
 import MainMenu from './src/components/MainMenu';
 import reducers from './src/reducers';
 
@@ -34,6 +34,7 @@ const AccountStackScreen = () => {
     >
       <AccountStack.Screen name="Account" component={Account} />
       <AccountStack.Screen name="EditField" component={EditField} />
+      <AccountStack.Screen name="Login" component={Login} />
     </AccountStack.Navigator>
   );
 };
@@ -51,7 +52,6 @@ const App: () => React$Node = () => {
           <Tab.Screen name="PostList" component={PostList} />
           <Tab.Screen name="PostDetail" component={PostDetail} />
           <Tab.Screen name="Account" component={AccountStackScreen} />
-          <Tab.Screen name="Login" component={Login} />
         </Tab.Navigator>
       </NavigationContainer>
     </Provider>
