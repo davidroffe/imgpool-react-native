@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -10,11 +11,12 @@ import { EditIcon } from '../../components/icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Account = (props) => {
-  useEffect(() => {
+  useFocusEffect(() => {
     async function fetchToken() {
       const auth = await SecureStore.getItemAsync('auth');
-      const storedUser = jwtDecode(auth);
+
       if (auth !== null) {
+        const storedUser = jwtDecode(auth);
         props.setUser('token', auth);
         props.setUser('id', storedUser.id);
         props.setUser('email', storedUser.email);

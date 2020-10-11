@@ -1,5 +1,6 @@
 import jwtDecode from 'jwt-decode';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -24,11 +25,12 @@ export const Login = (props) => {
   });
   const [form, setForm] = useState('login');
 
-  useEffect(() => {
+  useFocusEffect(() => {
     async function fetchToken() {
       const auth = await SecureStore.getItemAsync('auth');
-      const storedUser = jwtDecode(auth);
+
       if (auth !== null) {
+        const storedUser = jwtDecode(auth);
         props.setUser('token', auth);
         props.setUser('id', storedUser.id);
         props.setUser('email', storedUser.email);
@@ -36,6 +38,7 @@ export const Login = (props) => {
         props.setUser('loggedIn', true);
         props.setUser('admin', storedUser.admin);
         props.setUser('init', true);
+        props.navigation.navigate('Account');
       }
     }
 
