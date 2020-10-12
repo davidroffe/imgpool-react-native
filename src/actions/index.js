@@ -169,7 +169,6 @@ export const login = (user, navigation) => (dispatch) => {
       email: user.email,
       username: user.username,
       password: user.password,
-      passwordConfirm: user.passwordConfirm,
     });
     fetch(`${url}?${urlSeachParams}`, {
       method: 'POST',
@@ -178,7 +177,6 @@ export const login = (user, navigation) => (dispatch) => {
         const auth = getCookies(res).auth;
         if (auth) {
           const resUser = jwtDecode(auth);
-
           setUser('token', auth);
           setUser('id', resUser.id);
           setUser('email', resUser.email);
