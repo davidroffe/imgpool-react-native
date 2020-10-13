@@ -15,6 +15,7 @@ export const PostList = (props) => {
     <FlatList
       data={props.posts.list}
       numColumns={2}
+      columnWrapperStyle={styles.container}
       renderItem={({ item }) => (
         <TouchableOpacity
           style={styles.thumbnailWrapper}
@@ -42,8 +43,13 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, actions)(PostList);
 
 const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
   thumbnailWrapper: {
-    flex: 1,
+    width: '49.5%',
+    marginBottom: '1%',
   },
   thumbnail: {
     aspectRatio: 1,
